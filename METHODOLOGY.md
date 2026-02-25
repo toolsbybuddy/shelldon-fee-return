@@ -19,17 +19,15 @@
 
 **Fee claim transaction:**
 - Tx: [`yfPP4KG4Go2kdgEjGQAinynE9mWWo5iPjXuHpio3yE9iQ9yTNs4Tw33ZB9UCy3Vv5FzcwoKrgpfvuETNH5DTJph`](https://solscan.io/tx/yfPP4KG4Go2kdgEjGQAinynE9mWWo5iPjXuHpio3yE9iQ9yTNs4Tw33ZB9UCy3Vv5FzcwoKrgpfvuETNH5DTJph)
-- Amount: ~24.98 SOL
+- **Exact amount: 24.978981756 SOL** (verified on-chain — wallet went from 0.000000000 to 24.978981756)
 - Date: February 21, 2026
 - Claimed to wallet: `At7vrkYgPswMBUo6cZKuEe6o3wQ6gfSsvYpmrwBdV9qA`
 
-**Post-claim transfers (these moved SOL to Commander's wallet for safekeeping before distribution plan was finalized):**
+**Post-claim transfers (moved SOL to team wallet for safekeeping before distribution plan was finalized):**
 - Test: 0.005 SOL — [Tx](https://solscan.io/tx/46YLQTAdxBNSPxwKw8zY9FSatHCqvr5iLCKVmK5XS2JRnE6Xx2UPmYyrEeQBQebWWYv1PYBrCSjuPvpwWPghNQtR)
 - Main: 26 SOL — [Tx](https://solscan.io/tx/3QVi8VpqJnuamdZ64JS4ABX9AaVDCeEqGosdnJ6MdzARoprmrt5nSFarduFtTGXjpxMyTcqBQ9YoQhCE5t4DjyKV)
 
-**Exact amount to distribute:** _TODO — verify exact claimed amount from on-chain tx data_
-
-**Note:** Additional fees have accumulated since the claim. Decision needed on whether to include post-claim accumulated fees or only the original claim amount.
+**Exact amount to distribute: 24.978981756 SOL**
 
 ### Base (WETH)
 
@@ -63,13 +61,13 @@
 ## Step 3: Filter Holders
 
 ### Bags.fm Exclusions
-| Address | Reason | % of Supply |
-|---------|--------|-------------|
-| `HLnpSz9h2S4hiLQ43rnSD9XkcUThA7B8hQMKmDaiTLcC` | Meteora LP Pool Authority | 85.62% |
-| `At7vrkYgPswMBUo6cZKuEe6o3wQ6gfSsvYpmrwBdV9qA` | Our wallet (Team Shelldon) | TBD |
-| _TODO: Identify any other contract/program accounts_ | | |
+| Address | Reason | Tokens | % of Supply |
+|---------|--------|--------|-------------|
+| `HLnpSz9h2S4hiLQ43rnSD9XkcUThA7B8hQMKmDaiTLcC` | Meteora LP Pool Authority (2 token accounts) | 855,980,358.03 | 85.63% |
 
-**Eligible holders after filtering:** _TODO_
+**Note:** Our wallet (`At7vrkYgPswMBUo6cZKuEe6o3wQ6gfSsvYpmrwBdV9qA`) does not appear in the holder list — we held fees, not tokens.
+
+**Eligible holders after filtering:** 65
 
 ### Base Exclusions
 | Address | Reason | % of Supply |
@@ -93,7 +91,20 @@ holder_share = (holder_tokens / total_eligible_tokens) * total_fees_to_distribut
 
 Where `total_eligible_tokens` = sum of all eligible (non-excluded) holder balances.
 
-Full calculations: `data/bags_distribution.csv` and `data/base_distribution.csv`
+### Bags.fm Distribution Calculation
+
+- **Total eligible tokens:** 143,669,862.13
+- **Total SOL to distribute:** 24.978981756
+- **Formula:** `holder_sol = (holder_tokens / 143,669,862.13) * 24.978981756`
+- **Sum verification:** All 65 distributions sum to exactly 24.978981756 SOL ✅
+
+Full per-holder breakdown: `data/bags_distribution.csv`
+
+### Base Distribution Calculation
+
+_TODO_
+
+Full calculations: `data/base_distribution.csv`
 
 ---
 
