@@ -112,7 +112,7 @@ Full calculations: `data/base_distribution.csv`
 
 - **Tokens burned:** 2,398,759,252.74 Base Shelldon
 - **Burn address:** `0x000000000000000000000000000000000000dEaD`
-- **Transaction:** _TODO: Add tx hash from Bill_
+- **Transaction:** [`0x4e9468eaddffa85ba5e07d4382bb63bc0316b120f1d346d62e82af53d301852b`](https://basescan.org/tx/0x4e9468eaddffa85ba5e07d4382bb63bc0316b120f1d346d62e82af53d301852b)
 - **Status:** ✅ DONE (February 25, 2026)
 
 ---
