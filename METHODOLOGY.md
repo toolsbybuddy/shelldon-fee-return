@@ -2,18 +2,18 @@
 
 ## High-Level Steps
 
-1. **Calculate total fees to distribute** — Verify exact SOL and WETH amounts claimed from Bags.fm and Base
-2. **Snapshot holders** — Capture holder lists at a fixed point in time for both chains
-3. **Filter holders** — Remove LP contracts, our own wallets, burn addresses, and other non-eligible accounts
-4. **Calculate proportional distribution** — Each eligible holder receives a share proportional to their token holdings
+1. **Calculate total fees to distribute** — Verify exact SOL and WETH amounts claimed from Bags.fm and Base ✅ DONE
+2. **Snapshot holders** — Capture holder lists at a fixed point in time for both chains ✅ DONE
+3. **Filter holders** — Remove LP contracts, our own wallets, burn addresses, and other non-eligible accounts ✅ DONE (Bags.fm) / 🔄 IN PROGRESS (Base)
+4. **Calculate proportional distribution** — Each eligible holder receives a share proportional to their token holdings ✅ DONE (Bags.fm) / 🔄 IN PROGRESS (Base)
 5. **Burn Base tokens** — Send all 2.4B Base Shelldon tokens to burn address ✅ DONE
-6. **Distribute Bags.fm (SOL) fees** — Send proportional SOL to each eligible Bags.fm holder
-7. **Distribute Base (WETH) fees** — Send proportional WETH to each eligible Base holder
-8. **Publish receipts** — All transaction hashes documented and repo made public
+6. **Distribute Bags.fm (SOL) fees** — Send proportional SOL to each eligible Bags.fm holder ✅ DONE
+7. **Distribute Base (WETH) fees** — Send proportional WETH to each eligible Base holder 🔄 IN PROGRESS
+8. **Publish receipts** — All transaction hashes documented and repo made public ✅ DONE (partial — Base receipts pending step 7)
 
 ---
 
-## Step 1: Calculate Total Fees to Distribute
+## Step 1: Calculate Total Fees to Distribute ✅ DONE
 
 ### Bags.fm (SOL)
 
@@ -40,7 +40,7 @@
 
 ---
 
-## Step 2: Snapshot Holders
+## Step 2: Snapshot Holders ✅ DONE
 
 ### Bags.fm Holders
 - **Snapshot date:** February 24, 2026, ~10:42 PM CST
@@ -54,13 +54,12 @@
 - **Base block:** 42,602,607
 - **Total holders:** 473 (via Blockscout API)
 - **Data source:** Blockscout API (`base.blockscout.com`)
-- **Raw data:** `data/base_holders_raw.json`
 
 ---
 
 ## Step 3: Filter Holders
 
-### Bags.fm Exclusions
+### Bags.fm Exclusions ✅ DONE
 | Address | Reason | Tokens | % of Supply |
 |---------|--------|--------|-------------|
 | `HLnpSz9h2S4hiLQ43rnSD9XkcUThA7B8hQMKmDaiTLcC` | Meteora LP Pool Authority (2 token accounts) | 855,980,358.03 | 85.63% |
@@ -69,16 +68,16 @@
 
 **Eligible holders after filtering:** 65
 
-### Base Exclusions
+### Base Exclusions 🔄 IN PROGRESS
 | Address | Reason | % of Supply |
 |---------|--------|-------------|
 | `0x498581fF718922c3f8e6A244956aF099B2652b2b` | PoolManager (LP) | 62.28% |
 | `0x16045e90008cBEC3e836fB24a7881E8D4343D81e` | Our wallet (Team Shelldon) | 2.40% |
 | `0xD59cE43E53D69F190E15d9822Fb4540dCcc91178` | DecayMulticurveInitializer | 2.22% |
 | `0x000...dead` / `0x000...0000` | Burn addresses | TBD |
-| _TODO: Classify remaining 210 contracts_ | | |
+| _~210 contracts under classification_ | LP/DEX vs smart wallets | — |
 
-**Eligible holders after filtering:** _TODO_
+**Eligible holders after filtering:** _In progress — contract classification ongoing_
 
 ---
 
@@ -91,7 +90,7 @@ holder_share = (holder_tokens / total_eligible_tokens) * total_fees_to_distribut
 
 Where `total_eligible_tokens` = sum of all eligible (non-excluded) holder balances.
 
-### Bags.fm Distribution Calculation
+### Bags.fm Distribution Calculation ✅ DONE
 
 - **Total eligible tokens:** 143,669,862.13
 - **Total SOL to distribute:** 24.978981756
@@ -100,37 +99,51 @@ Where `total_eligible_tokens` = sum of all eligible (non-excluded) holder balanc
 
 Full per-holder breakdown: `data/bags_distribution.csv`
 
-### Base Distribution Calculation
+### Base Distribution Calculation 🔄 IN PROGRESS
 
-_TODO_
+Pending completion of holder filtering (Step 3). Distribution formula will follow the same proportional approach.
 
-Full calculations: `data/base_distribution.csv`
+Full calculations will be in: `data/base_distribution.csv`
 
 ---
 
-## Step 5: Burn Base Tokens
+## Step 5: Burn Base Tokens ✅ DONE
 
 - **Tokens burned:** 2,398,759,252.74 Base Shelldon
 - **Burn address:** `0x000000000000000000000000000000000000dEaD`
 - **Transaction:** [`0x4e9468eaddffa85ba5e07d4382bb63bc0316b120f1d346d62e82af53d301852b`](https://basescan.org/tx/0x4e9468eaddffa85ba5e07d4382bb63bc0316b120f1d346d62e82af53d301852b)
-- **Status:** ✅ DONE (February 25, 2026)
+- **Date:** February 25, 2026
 
 ---
 
-## Step 6: Distribute Bags.fm (SOL) Fees
+## Step 6: Distribute Bags.fm (SOL) Fees ✅ DONE
 
-_TODO: Execute and document_
+- **Total distributed:** 24.978981756 SOL
+- **Recipients:** 58 transfers (65 eligible holders; 7 had zero calculated share due to rounding at lamport precision)
+- **Execution:** 4 batches, 0 failures
+- **Source wallet:** `At7vrkYgPswMBUo6cZKuEe6o3wQ6gfSsvYpmrwBdV9qA`
+- **Date:** February 25, 2026
+
+Full transfer log with all transaction hashes: `data/bags_distribution_worksheet_completed.csv`
 
 ---
 
-## Step 7: Distribute Base (WETH) Fees
+## Step 7: Distribute Base (WETH) Fees 🔄 IN PROGRESS
 
-_TODO: Execute and document_
+Base holders — if you're reading this, we haven't forgotten you. The Solana distribution is complete and the Base (WETH) distribution is actively being worked on. The same proportional methodology applies: your share will be calculated based on your token holdings at block 42,602,607.
+
+We are currently:
+- Classifying the ~210 smart contract addresses in the holder list (LP pools, DEX contracts, etc.)
+- Finalizing the eligible holder set
+- Calculating per-holder WETH amounts
+
+Expected: distribution CSV and execution to follow shortly after Step 3/4 are finalized.
 
 ---
 
-## Step 8: Publish
+## Step 8: Publish Receipts
 
-- [ ] Make this repo public
-- [ ] Post announcement with link to repo
-- [ ] Community can verify all transactions on-chain
+- [x] Repo made public
+- [x] Bags.fm: all transaction hashes documented (`data/bags_distribution_worksheet_completed.csv`)
+- [ ] Base: transaction hashes pending (Step 7)
+- [ ] Post final wrap-up announcement once Base distribution complete
