@@ -4,8 +4,8 @@
 
 1. **Calculate total fees to distribute** — Verify exact SOL and WETH amounts claimed from Bags.fm and Base ✅ DONE
 2. **Snapshot holders** — Capture holder lists at a fixed point in time for both chains ✅ DONE
-3. **Filter holders** — Remove LP contracts, our own wallets, burn addresses, and other non-eligible accounts ✅ DONE (Bags.fm) / 🔄 IN PROGRESS (Base)
-4. **Calculate proportional distribution** — Each eligible holder receives a share proportional to their token holdings ✅ DONE (Bags.fm) / 🔄 IN PROGRESS (Base)
+3. **Filter holders** — Remove LP contracts, our own wallets, burn addresses, and other non-eligible accounts ✅ DONE
+4. **Calculate proportional distribution** — Each eligible holder receives a share proportional to their token holdings ✅ DONE
 5. **Burn Base tokens** — Send all 2.4B Base Shelldon tokens to burn address ✅ DONE
 6. **Distribute Bags.fm (SOL) fees** — Send proportional SOL to each eligible Bags.fm holder ✅ DONE
 7. **Distribute Base (WETH) fees** — Send proportional WETH to each eligible Base holder 🔄 IN PROGRESS
@@ -31,12 +31,15 @@
 
 ### Base (WETH)
 
-**Fee claims:**
-- ~0.065 WETH + ~1.467 WETH = ~1.53 WETH total
-- Claimed via Bankr interface
-- _TODO: Add Base transaction hashes for WETH claims_
+**Fee claim transactions (via Bankr interface):**
+- Tx 1: [`0x3e92dfd7949c09a57f20823274e503cac46c5e59bf13effd9ba7464202ee849a`](https://basescan.org/tx/0x3e92dfd7949c09a57f20823274e503cac46c5e59bf13effd9ba7464202ee849a)
+  - **1.467524235502269958 WETH** received at block 42,474,950
+- Tx 2: [`0x336179eafafed36a9342da06e31c4a65cb097f48364dda402e7fdd1b2cd756cb`](https://basescan.org/tx/0x336179eafafed36a9342da06e31c4a65cb097f48364dda402e7fdd1b2cd756cb)
+  - **0.064796133347224477 WETH** received at block 42,474,971
+- Claimed to wallet: `0x16045e90008cBEC3e836fB24a7881E8D4343D81e` (Bankr)
+- Amounts verified on-chain via Blockscout token transfer records
 
-**Amount to distribute:** ~1.53 WETH
+**Exact amount to distribute: 1.532320368849494435 WETH**
 
 ---
 
@@ -52,12 +55,12 @@
 ### Base Holders
 - **Snapshot date:** February 24, 2026, 10:42:41 PM CST
 - **Base block:** 42,602,607
-- **Total holders:** 473 (via Blockscout API)
+- **Total holders:** 474 (473 via Blockscout API + 1 team wallet confirmed on-chain)
 - **Data source:** Blockscout API (`base.blockscout.com`)
 
 ---
 
-## Step 3: Filter Holders
+## Step 3: Filter Holders ✅ DONE
 
 ### Bags.fm Exclusions ✅ DONE
 | Address | Reason | Tokens | % of Supply |
@@ -68,16 +71,32 @@
 
 **Eligible holders after filtering:** 65
 
-### Base Exclusions 🔄 IN PROGRESS
-| Address | Reason | % of Supply |
-|---------|--------|-------------|
-| `0x498581fF718922c3f8e6A244956aF099B2652b2b` | PoolManager (LP) | 62.28% |
-| `0x16045e90008cBEC3e836fB24a7881E8D4343D81e` | Our wallet (Team Shelldon) | 2.40% |
-| `0xD59cE43E53D69F190E15d9822Fb4540dCcc91178` | DecayMulticurveInitializer | 2.22% |
-| `0x000...dead` / `0x000...0000` | Burn addresses | TBD |
-| _~210 contracts under classification_ | LP/DEX vs smart wallets | — |
+### Base Exclusions ✅ DONE
 
-**Eligible holders after filtering:** _In progress — contract classification ongoing_
+**Classification method:** Bytecode analysis via Base JSON-RPC batch calls. All 210 contract addresses were checked using `eth_getCode` to determine their type.
+
+**Contract breakdown (210 total):**
+- **200 ERC-7702 smart wallets** — EOAs with delegated wallet implementations (bytecode: `0xef0100` + implementation address). These are real user wallets (mostly Coinbase Smart Wallet). **Included in distribution.**
+- **1 ERC-1167 minimal proxy** — Proxy wallet pattern. **Included in distribution.**
+- **1 TransparentUpgradeableProxy** — Has an owner/admin. **Included in distribution.**
+- **2 known infrastructure** — PoolManager + DecayMulticurveInitializer. **Excluded.**
+- **1 team wallet** — Our Bankr wallet. **Excluded.**
+- **5 protocol contracts** — Identified by source code (see table). **Excluded.**
+
+**Excluded addresses:**
+| Address | Name | Reason | % of Supply |
+|---------|------|--------|-------------|
+| `0x498581fF718922c3f8e6A244956aF099B2652b2b` | Uniswap V4: PoolManager | LP pool singleton | 62.28% |
+| `0xD59cE43E53D69F190E15d9822Fb4540dCcc91178` | DecayMulticurveInitializer | Clanker launch infrastructure | 2.22% |
+| `0x16045e90008cBEC3e836fB24a7881E8D4343D81e` | Team Shelldon (Bankr) | Our wallet | 2.40% |
+| `0x00000000009726632680FB29d3F7A9734E3010E2` | RainbowRouter | DEX aggregator | <0.01% |
+| `0x0A6d96E7f4D7b96CFE42185DF61E64d255c12DFf` | FeeCollector | Protocol fee contract | <0.01% |
+| `0x238a358808379702088667322f80aC48bAd5e6c4` | Vault | Protocol vault | <0.01% |
+| `0xF93191d350117723DBEda5484a3b0996d285CECF` | FeeManager | Protocol fee manager | <0.01% |
+| `0x4Ff1D40fb7B56665bf95D8D8e3A5320dE46709A1` | Unknown | Unverified, 0.10 tokens | <0.01% |
+| `0x63242A4Ea82847b20E506b63B0e2e2eFF0CC6cB0` | Unknown | Unverified, 0.00 tokens | <0.01% |
+
+**Eligible holders after filtering:** 465 (263 EOAs + 202 smart contract wallets)
 
 ---
 
@@ -99,11 +118,17 @@ Where `total_eligible_tokens` = sum of all eligible (non-excluded) holder balanc
 
 Full per-holder breakdown: `data/bags_distribution.csv`
 
-### Base Distribution Calculation 🔄 IN PROGRESS
+### Base Distribution Calculation ✅ DONE
 
-Pending completion of holder filtering (Step 3). Distribution formula will follow the same proportional approach.
+- **Total eligible token balance:** 126,609,187,227.21 (sum of all eligible holder balances)
+- **Total WETH to distribute:** 1.532320368849494435
+- **Formula:** `holder_weth = (holder_tokens / 126,609,187,227.21) * 1.532320368849494435`
+- **Holders with nonzero share:** 454 (11 had balances too small to produce even 1 wei of WETH)
+- **Sum verification:** Checksum matches total WETH to 18 decimal places ✅
 
-Full calculations will be in: `data/base_distribution.csv`
+**Note on token supply:** Holder balances sum to ~193B against a 100B total supply. This is an artifact of Uniswap V4's singleton PoolManager architecture and Clanker's DecayMulticurve accounting. It does not affect proportional fairness — each holder's share is calculated relative to all other eligible holders.
+
+Full per-holder breakdown: `data/base_distribution.csv`
 
 ---
 
@@ -128,16 +153,14 @@ Full transfer log with all transaction hashes: `data/bags_distribution_worksheet
 
 ---
 
-## Step 7: Distribute Base (WETH) Fees 🔄 IN PROGRESS
+## Step 7: Distribute Base (WETH) Fees 🔄 READY TO EXECUTE
 
-Base holders — if you're reading this, we haven't forgotten you. The Solana distribution is complete and the Base (WETH) distribution is actively being worked on. The same proportional methodology applies: your share will be calculated based on your token holdings at block 42,602,607.
+**Preparation complete:**
+- 454 eligible holders identified with calculated WETH amounts
+- Distribution CSV finalized: `data/base_distribution.csv`
+- Source wallet: `0x16045e90008cBEC3e836fB24a7881E8D4343D81e` (Bankr)
 
-We are currently:
-- Classifying the ~210 smart contract addresses in the holder list (LP pools, DEX contracts, etc.)
-- Finalizing the eligible holder set
-- Calculating per-holder WETH amounts
-
-Expected: distribution CSV and execution to follow shortly after Step 3/4 are finalized.
+**Awaiting:** Execution of WETH transfers. Transaction hashes will be recorded in the distribution CSV upon completion.
 
 ---
 
@@ -145,5 +168,6 @@ Expected: distribution CSV and execution to follow shortly after Step 3/4 are fi
 
 - [x] Repo made public
 - [x] Bags.fm: all transaction hashes documented (`data/bags_distribution_worksheet_completed.csv`)
-- [ ] Base: transaction hashes pending (Step 7)
+- [x] Base: contract classification and distribution calculations published (`data/base_distribution.csv`)
+- [ ] Base: transaction hashes pending (Step 7 execution)
 - [ ] Post final wrap-up announcement once Base distribution complete
