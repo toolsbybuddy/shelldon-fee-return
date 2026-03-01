@@ -153,14 +153,23 @@ Full transfer log with all transaction hashes: `data/bags_distribution_worksheet
 
 ---
 
-## Step 7: Distribute Base (WETH) Fees 🔄 READY TO EXECUTE
+## Step 7: Distribute Base (WETH) Fees ✅ DONE
 
-**Preparation complete:**
-- 454 eligible holders identified with calculated WETH amounts
-- Distribution CSV finalized: `data/base_distribution.csv`
-- Source wallet: `0x16045e90008cBEC3e836fB24a7881E8D4343D81e` (Bankr)
+**Executed:** March 1, 2026 via [disperse.app](https://disperse.app) using `disperseToken` (WETH, not native ETH — required for ERC-7702 smart wallet compatibility).
 
-**Awaiting:** Execution of WETH transfers. Transaction hashes will be recorded in the distribution CSV upon completion.
+**Distribution method:** WETH transferred from Brave Wallet on Base through the Disperse contract at `0xd15fE25eD0dbA12fe05e7029C88b10c25e8880E3`.
+
+| Batch | Recipients | WETH | Transaction |
+|-------|-----------|------|-------------|
+| 1 | 149 | ~1.4202 | [`0x245fd9c7...`](https://basescan.org/tx/0x245fd9c753f5ae74aca80a348b73e893d9847726425b6e2b65b95451b51dfc46) |
+| 2 | 150 | 0.1023 | [`0x824eb703...`](https://basescan.org/tx/0x824eb703bcbfd2cb90ce7636a795353d8aefb81bc3e81575acbd9f3bbf7b8859) |
+| 3 | 135 | 0.0081 | [`0x56cf7ab5...`](https://basescan.org/tx/0x56cf7ab51687baf69afd2aa96721bfaf89401fa505bc25c2db37312360d0bb29) |
+
+- **434 holders paid** across 3 batches, 0 failures
+- **1 remainder burned** (0.001698 WETH) to `0x...dEaD`: [`0x42ff1ec4...`](https://basescan.org/tx/0x42ff1ec433dc292d617085090a5585f48233880a8f9e9ba76d37b42c41da1cc9)
+- **19 dust accounts** excluded (< 0.000001 WETH, combined ~0.0000054 WETH)
+
+Full per-holder breakdown with tx hashes: `data/base_distribution.csv`
 
 ---
 
@@ -169,5 +178,5 @@ Full transfer log with all transaction hashes: `data/bags_distribution_worksheet
 - [x] Repo made public
 - [x] Bags.fm: all transaction hashes documented (`data/bags_distribution_worksheet_completed.csv`)
 - [x] Base: contract classification and distribution calculations published (`data/base_distribution.csv`)
-- [ ] Base: transaction hashes pending (Step 7 execution)
-- [ ] Post final wrap-up announcement once Base distribution complete
+- [x] Base: all transaction hashes documented (`data/base_distribution.csv`)
+- [x] All distributions complete — March 1, 2026
